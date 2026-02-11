@@ -1,0 +1,1132 @@
+{
+  "compatibilityLevel": 1550,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"attacks1\",\"Errors in attacks1\",\"DAX\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.138.782.0 (24.11)"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "Errors in attacks1",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "expression": [
+          "let",
+          "Source = attacks1,",
+          "  #\"Detected Type Mismatches\" = let",
+          "    tableWithOnlyPrimitiveTypes = Table.SelectColumns(Source, Table.ColumnsOfType(Source, {type nullable number, type nullable text, type nullable logical, type nullable date, type nullable datetime, type nullable datetimezone, type nullable time, type nullable duration})),",
+          "    recordTypeFields = Type.RecordFields(Type.TableRow(Value.Type(tableWithOnlyPrimitiveTypes))),",
+          "    fieldNames = Record.FieldNames(recordTypeFields),",
+          "    fieldTypes = List.Transform(Record.ToList(recordTypeFields), each [Type]),",
+          "    pairs = List.Transform(List.Positions(fieldNames), (i) => {fieldNames{i}, (v) => if v = null or Value.Is(v, fieldTypes{i}) then v else error [Message = \"The type of the value does not match the type of the column.\", Detail = v], fieldTypes{i}})",
+          "in",
+          "    Table.TransformColumns(Source, pairs),",
+          "  #\"Added Index\" = Table.AddIndexColumn(#\"Detected Type Mismatches\", \"Row Number\" ,1),",
+          "  #\"Kept Errors\" = Table.SelectRowsWithErrors(#\"Added Index\", {\"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Body Parts\", \"Fatal (Y/N)\", \"Parse\", \"Shark Type\", \"Investigator or Source\", \"original order\"}),",
+          "  #\"Reordered Columns\" = Table.ReorderColumns(#\"Kept Errors\", {\"Row Number\", \"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Body Parts\", \"Fatal (Y/N)\", \"Parse\", \"Shark Type\", \"Investigator or Source\", \"original order\"}),",
+          "    #\"Removed Errors\" = Table.RemoveRowsWithErrors(#\"Reordered Columns\", {\"Body Parts\"})",
+          "in",
+          "  #\"Removed Errors\""
+        ],
+        "kind": "m",
+        "lineageTag": "8c7ad84e-92c9-49da-b003-ca0f7655566b",
+        "queryGroup": "Query Errors - 6/12/2024 11:51:29 PM"
+      }
+    ],
+    "queryGroups": [
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "0"
+          }
+        ],
+        "description": "Errors in queries that were loaded on 6/12/2024 11:51:29 PM.",
+        "folder": "Query Errors - 6/12/2024 11:51:29 PM"
+      }
+    ],
+    "relationships": [
+      {
+        "name": "d6b90263-d9df-411d-8440-9e15bd8e2b24",
+        "fromColumn": "Merged",
+        "fromTable": "attacks1",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_d1dd56d8-2632-4336-9c58-abe185013f5f"
+      },
+      {
+        "name": "1b8009c1-fda2-45ea-a52c-b3beafd92747",
+        "fromColumn": "Date",
+        "fromTable": "attacks1",
+        "joinOnDateBehavior": "datePartOnly",
+        "toColumn": "Date",
+        "toTable": "LocalDateTable_0fc81cc0-cef2-436b-aa67-2450dcf6bc32"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "attacks1",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Merged",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "0781099b-cdad-4e62-8740-39ccf20d6231",
+            "sourceColumn": "Merged",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_d1dd56d8-2632-4336-9c58-abe185013f5f"
+                },
+                "isDefault": true,
+                "relationship": "d6b90263-d9df-411d-8440-9e15bd8e2b24"
+              }
+            ]
+          },
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Date",
+            "lineageTag": "3177771a-8ad1-4cc5-a679-7e917795c23f",
+            "sourceColumn": "Date",
+            "summarizeBy": "none",
+            "variations": [
+              {
+                "name": "Variation",
+                "defaultHierarchy": {
+                  "hierarchy": "Date Hierarchy",
+                  "table": "LocalDateTable_0fc81cc0-cef2-436b-aa67-2450dcf6bc32"
+                },
+                "isDefault": true,
+                "relationship": "1b8009c1-fda2-45ea-a52c-b3beafd92747"
+              }
+            ]
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "e602d4e6-4a6f-4f5f-899d-1a983b4a8515",
+            "sourceColumn": "Year",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Attack Type",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "9c6bdf6e-e6a0-4171-858e-6a6c83ac5422",
+            "sourceColumn": "Attack Type",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Country",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "32aa1c65-09c8-4d00-9eed-7c4def7ebb4b",
+            "sourceColumn": "Country",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Area",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "4277c43a-d07d-4b25-8664-06232da7970d",
+            "sourceColumn": "Area",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Location",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "a6052ceb-7d2c-40db-9280-7c78fcdb48c1",
+            "sourceColumn": "Location",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Activity",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "cdc996c4-10c9-4637-8505-01e10baaa4c2",
+            "sourceColumn": "Activity",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "424580ef-1024-4b5c-8e86-358a2819864d",
+            "sourceColumn": "Name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Sex ",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d0480c2d-30c8-47d0-9d5f-e230184a685e",
+            "sourceColumn": "Sex ",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Age",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ],
+            "dataType": "double",
+            "lineageTag": "8b2ac5f9-3330-4c97-a5fb-330d80f3ea15",
+            "sourceColumn": "Age",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Fatal (Y/N)",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "1cdcca6d-ba54-40fc-9960-6a7fd61aa754",
+            "sourceColumn": "Fatal (Y/N)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Investigator or Source",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "ec4dc474-2a1b-46da-8428-d23576eb8fcc",
+            "sourceColumn": "Investigator or Source",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "original order",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "c8ab0037-b89e-4fc6-a5c7-59e67c8e1aee",
+            "sourceColumn": "original order",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "Body Parts",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f24ba345-2c5f-4136-b434-457b5b842fbf",
+            "sourceColumn": "Body Parts",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Parse",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Time"
+              }
+            ],
+            "dataType": "dateTime",
+            "formatString": "Long Time",
+            "lineageTag": "ae482ba0-5f52-466b-91e3-87e4b75ca47b",
+            "sourceColumn": "Parse",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Shark Type",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "be2c4295-9448-45d6-8c8d-fdb2b3c35a03",
+            "sourceColumn": "Shark Type",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "3258e9ec-2150-43cd-ab97-ce27c945dcc9",
+        "partitions": [
+          {
+            "name": "attacks1",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    attacks1 = let",
+                "    Source = Excel.Workbook(File.Contents(\"C:\\Users\\Lenovo\\Desktop\\Quantum Analytics DAF program\\DAFI Project\\Project Analysis Power BI\\Project 9 Shark Attacks.csv\\attacks1.xlsx\"), null, true),",
+                "    attacks_Table = Source{[Item=\"attacks\",Kind=\"Table\"]}[Data],",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(attacks_Table,{{\"Case Number\", type text}, {\"Date\", type any}, {\"Year\", Int64.Type}, {\"Type\", type text}, {\"Country\", type text}, {\"Area\", type text}, {\"Location\", type text}, {\"Activity\", type text}, {\"Name\", type text}, {\"Sex \", type text}, {\"Age\", type any}, {\"Injury\", type text}, {\"Fatal (Y/N)\", type text}, {\"Time\", type any}, {\"Species \", type text}, {\"Investigator or Source\", type text}, {\"pdf\", type text}, {\"href formula\", type text}, {\"href\", type text}, {\"Case Number2\", type text}, {\"Case Number3\", type text}, {\"original order\", Int64.Type}}),",
+                "    #\"Split Column by Character Transition\" = Table.SplitColumn(#\"Changed Type\", \"Case Number\", Splitter.SplitTextByCharacterTransition({\"0\"..\"9\"}, (c) => not List.Contains({\"0\"..\"9\"}, c)), {\"Case Number.1\", \"Case Number.2\", \"Case Number.3\", \"Case Number.4\"}),",
+                "    #\"Merged Columns\" = Table.CombineColumns(#\"Split Column by Character Transition\",{\"Case Number.1\", \"Case Number.2\", \"Case Number.3\"},Combiner.CombineTextByDelimiter(\"\", QuoteStyle.None),\"Merged\"),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Merged Columns\",{\"Case Number.4\"}),",
+                "    #\"Replaced Value\" = Table.ReplaceValue(#\"Removed Columns\",\".\",\"/\",Replacer.ReplaceText,{\"Merged\"}),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Replaced Value\",{{\"Merged\", type date}}),",
+                "    #\"Removed Errors\" = Table.RemoveRowsWithErrors(#\"Changed Type1\", {\"Merged\"}),",
+                "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Removed Errors\",{{\"Date\", type text}}),",
+                "    #\"Replaced Value1\" = Table.ReplaceValue(#\"Changed Type2\",\"Reported\",\"\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value2\" = Table.ReplaceValue(#\"Replaced Value1\",\"-\",\"/\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value3\" = Table.ReplaceValue(#\"Replaced Value2\",\"Jun\",\"06\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value4\" = Table.ReplaceValue(#\"Replaced Value3\",\"May\",\"05\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value5\" = Table.ReplaceValue(#\"Replaced Value4\",\"Feb\",\"02\",Replacer.ReplaceText,{\"Date\"})",
+                "in",
+                "    #\"Replaced Value3\",",
+                "    #\"Replaced Value\" = Table.ReplaceValue(attacks1,\"May\",\"05\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value1\" = Table.ReplaceValue(#\"Replaced Value\",\"Jul\",\"07\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value2\" = Table.ReplaceValue(#\"Replaced Value1\",\"Apr\",\"04\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value3\" = Table.ReplaceValue(#\"Replaced Value2\",\"Mar\",\"03\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value4\" = Table.ReplaceValue(#\"Replaced Value3\",\"Feb\",\"02\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value5\" = Table.ReplaceValue(#\"Replaced Value4\",\"Jan\",\"01\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value6\" = Table.ReplaceValue(#\"Replaced Value5\",\"Dec\",\"12\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value7\" = Table.ReplaceValue(#\"Replaced Value6\",\"Sep\",\"09\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value8\" = Table.ReplaceValue(#\"Replaced Value7\",\"Oct\",\"10\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value9\" = Table.ReplaceValue(#\"Replaced Value8\",\"Aug\",\"08\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Replaced Value10\" = Table.ReplaceValue(#\"Replaced Value9\",\"Nov\",\"11\",Replacer.ReplaceText,{\"Date\"}),",
+                "    #\"Trimmed Text\" = Table.TransformColumns(#\"Replaced Value10\",{{\"Date\", Text.Trim, type text}}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Trimmed Text\",{{\"Date\", type date}}),",
+                "    #\"Removed Errors\" = Table.RemoveRowsWithErrors(#\"Changed Type\", {\"Date\"}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Removed Errors\", each [Year] <> null and [Year] <> \"\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"Type\", \"Attack Type\"}}),",
+                "    #\"Replaced Value11\" = Table.ReplaceValue(#\"Renamed Columns\",null,\"no data\",Replacer.ReplaceValue,{\"Attack Type\"}),",
+                "    #\"Replaced Value12\" = Table.ReplaceValue(#\"Replaced Value11\",null,\"no data\",Replacer.ReplaceValue,{\"Area\"}),",
+                "    #\"Replaced Value13\" = Table.ReplaceValue(#\"Replaced Value12\",null,\"no data\",Replacer.ReplaceValue,{\"Location\"}),",
+                "    #\"Replaced Value14\" = Table.ReplaceValue(#\"Replaced Value13\",null,\"no data\",Replacer.ReplaceValue,{\"Activity\"}),",
+                "    #\"Replaced Value15\" = Table.ReplaceValue(#\"Replaced Value14\",null,\"no data\",Replacer.ReplaceValue,{\"Name\"}),",
+                "    #\"Trimmed Text1\" = Table.TransformColumns(#\"Replaced Value15\",{{\"Sex \", Text.Trim, type text}}),",
+                "    #\"Replaced Value16\" = Table.ReplaceValue(#\"Trimmed Text1\",\".\",\"no data\",Replacer.ReplaceText,{\"Sex \"}),",
+                "    #\"Replaced Value17\" = Table.ReplaceValue(#\"Replaced Value16\",null,\"no data\",Replacer.ReplaceValue,{\"Sex \"}),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Replaced Value17\",{{\"Age\", Int64.Type}}),",
+                "    #\"Replaced Value18\" = Table.ReplaceValue(#\"Changed Type1\",null,0,Replacer.ReplaceValue,{\"Age\"}),",
+                "    #\"Replaced Errors\" = Table.ReplaceErrorValues(#\"Replaced Value18\", {{\"Age\", 0}}),",
+                "    #\"Added Conditional Column\" = Table.AddColumn(#\"Replaced Errors\", \"Body Parts\", each if Text.Contains([Injury], \"hand\") then \"Hand\" else if Text.Contains([Injury], \"leg\") then \"Leg\" else if Text.Contains([Injury], \"foot\") then \"Feet\" else if Text.Contains([Injury], \"shin\") then \"shin\" else if Text.Contains([Injury], \"thigh\") then \"Thigh\" else if Text.Contains([Injury], \"calf\") then \"Calf\" else if Text.Contains([Injury], \"knee\") then \"Knee\" else if Text.Contains([Injury], \"ankel\") then \"Ankel\" else if Text.Contains([Injury], \"arm\") then \"Arm\" else if Text.Contains([Injury], \"finger\") then \"Finger\" else if Text.Contains([Injury], \"toe\") then \"Toe\" else if Text.Contains([Injury], \"buttock\") then \"Buttock\" else if Text.Contains([Injury], \"chest\") then \"Chest\" else if Text.Contains([Injury], \"forearm\") then \"Forearm\" else if Text.Contains([Injury], \"wrist\") then \"Wrist\" else if [Injury] = null then \"no data\" else \"torso\"),",
+                "    #\"Reordered Columns\" = Table.ReorderColumns(#\"Added Conditional Column\",{\"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Injury\", \"Body Parts\", \"Fatal (Y/N)\", \"Time\", \"Species \", \"Investigator or Source\", \"pdf\", \"href formula\", \"href\", \"Case Number2\", \"Case Number3\", \"original order\"}),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Reordered Columns\", each ([#\"Fatal (Y/N)\"] <> \"2017\")),",
+                "    #\"Replaced Value19\" = Table.ReplaceValue(#\"Filtered Rows1\",null,\"no data\",Replacer.ReplaceValue,{\"Fatal (Y/N)\"}),",
+                "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Replaced Value19\",{{\"Time\", type text}}),",
+                "    #\"Replaced Value20\" = Table.ReplaceValue(#\"Changed Type2\",\"h\",\":\",Replacer.ReplaceText,{\"Time\"}),",
+                "    #\"Replaced Value21\" = Table.ReplaceValue(#\"Replaced Value20\",\"j\",\":\",Replacer.ReplaceText,{\"Time\"}),",
+                "    #\"Inserted Parsed Time\" = Table.AddColumn(#\"Replaced Value21\", \"Parse\", each Time.From(DateTimeZone.From([Time])), type time),",
+                "    #\"Replaced Errors1\" = Table.ReplaceErrorValues(#\"Inserted Parsed Time\", {{\"Parse\", null}}),",
+                "    #\"Reordered Columns1\" = Table.ReorderColumns(#\"Replaced Errors1\",{\"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Injury\", \"Body Parts\", \"Fatal (Y/N)\", \"Time\", \"Parse\", \"Species \", \"Investigator or Source\", \"pdf\", \"href formula\", \"href\", \"Case Number2\", \"Case Number3\", \"original order\"}),",
+                "    #\"Added Conditional Column1\" = Table.AddColumn(#\"Reordered Columns1\", \"Shark Type\", each if Text.Contains([#\"Species \"], \"White shark\") then \"White Shark\" else if Text.Contains([#\"Species \"], \"7 gill shark\") then \"7 gill shark\" else if Text.Contains([#\"Species \"], \"Smooth hound\") then \"Smooth hound\" else if Text.Contains([#\"Species \"], \"Tiger shark\") then \"Tiger shark\" else if Text.Contains([#\"Species \"], \"Lemon shark\") then \"Lemon shark\" else if Text.Contains([#\"Species \"], \"Bull shark\") then \"Bull shark\" else if Text.Contains([#\"Species \"], \"Caribbean reef shark\") then \"Caribbean reef shark\" else if Text.Contains([#\"Species \"], \"Dogfish shark\") then \"Dogfish shark\" else if Text.Contains([#\"Species \"], \"Wobbegong shark\") then \"Wobbegong shark\" else if Text.Contains([#\"Species \"], \"Grey reef shark\") then \"Grey reef shark\" else if Text.Contains([#\"Species \"], \"Silky shark\") then \"Silky shark\" else if Text.Contains([#\"Species \"], \"Mako shark\") then \"Mako shark\" else if Text.Contains([#\"Species \"], \"Bronze whaler shark\") then \"Bronze whaler shark\" else if Text.Contains([#\"Species \"], \"Galapagos shark\") then \"Galapagos shark\" else if Text.Contains([#\"Species \"], \"Spinner shark\") then \"Spinner shark\" else if Text.Contains([#\"Species \"], \"Sandtiger shark\") then \"Sandtiger shark\" else if Text.Contains([#\"Species \"], \"Reef shark\") then \"Reef shark\" else if Text.Contains([#\"Species \"], \"Angel shark\") then \"Angel shark\" else if Text.Contains([#\"Species \"], \"Blue shark\") then \"Blue shark\" else if Text.Contains([#\"Species \"], null) then \"no data\" else \"others\"),",
+                "    #\"Removed Errors1\" = Table.RemoveRowsWithErrors(#\"Added Conditional Column1\", {\"Shark Type\"}),",
+                "    #\"Reordered Columns2\" = Table.ReorderColumns(#\"Removed Errors1\",{\"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Injury\", \"Body Parts\", \"Fatal (Y/N)\", \"Time\", \"Parse\", \"Species \", \"Shark Type\", \"Investigator or Source\", \"pdf\", \"href formula\", \"href\", \"Case Number2\", \"Case Number3\", \"original order\"}),",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Reordered Columns2\",{\"Merged\", \"Date\", \"Year\", \"Attack Type\", \"Country\", \"Area\", \"Location\", \"Activity\", \"Name\", \"Sex \", \"Age\", \"Body Parts\", \"Fatal (Y/N)\", \"Parse\", \"Shark Type\", \"Investigator or Source\", \"original order\"}),",
+                "    #\"Removed Errors2\" = Table.RemoveRowsWithErrors(#\"Removed Other Columns\", {\"Body Parts\"})",
+                "in",
+                "    #\"Removed Errors2\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DateTableTemplate_7dddb68d-41ab-4bd8-b428-1e19f55daa44",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "e4085efe-c7e3-49dd-bc93-00fd9aa5dcdd",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "bba397ea-2202-43e7-b43b-c449abf7613f",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "17692046-afe4-4dbc-8e29-c945020ae72a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "143dbeea-5636-4f99-a1cc-fe1396981d1c",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "e8ef9c7e-fbfc-4f4a-8cbe-06ddbf4fbbf9",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "4ffe6419-65a7-491c-953c-769d1801c187",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "c818912f-d8ad-477a-81a5-288dc4e8abbc",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "ed982b33-bc3a-49d9-b14b-3ccf4b759256",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "b7d5f9ce-255b-420c-9940-f54371ea7414",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "78ea74c2-843e-45f9-9d50-7e93a3331d77",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "078cb574-e1c7-4dfc-8501-07c1061eb3f8",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "744b47a1-bf4d-4c72-a172-2ece1efcbb43"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "ffd94390-604a-498d-9f82-00a8ec07743b",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_7dddb68d-41ab-4bd8-b428-1e19f55daa44",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocalDateTable_d1dd56d8-2632-4336-9c58-abe185013f5f",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "5b9f0973-4ccf-47a6-bdc0-bc88aad84cd1",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "3ef2142c-de20-40c6-8bce-2da8b8424f4e",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "46fbdfc2-1f71-45cc-bb9a-c54f9066bbca",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "c30303e7-6626-4718-a086-94a38cf9c8df",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "8571f36d-8233-4fb9-8048-36c3557f6884",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "7584ab04-e537-4740-a9f8-4149c4a771ff",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "d10bb7e3-99a5-4658-9cb6-62108b9ca4bf",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "cb143166-2d22-49e3-bb8a-2eac1898986c",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "12df0b0b-3f61-4e96-9905-207cec161c6a",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "f34248d7-397a-49a4-9177-ef91d333dd53",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "4cae9516-9684-4cb1-9985-7d2717efe045",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "1d3849b3-5d3f-47dc-8a9e-98db87498d7a"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "fcf70ce4-5d97-415d-b018-4925f5b5b354",
+        "partitions": [
+          {
+            "name": "LocalDateTable_d1dd56d8-2632-4336-9c58-abe185013f5f",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('attacks1'[Merged])), 1, 1), Date(Year(MAX('attacks1'[Merged])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      },
+      {
+        "name": "LocalDateTable_0fc81cc0-cef2-436b-aa67-2450dcf6bc32",
+        "annotations": [
+          {
+            "name": "__PBI_LocalDateTable",
+            "value": "true"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "14d1eb13-9f1b-4cb9-8577-bfd9cd6b06f7",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "e34462dc-939f-4f15-8631-33ebd67415e2",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "1a0cfd41-011e-47d8-a3cf-6779f69eee4a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "e8827272-920c-4e44-bac8-08692c828a3a",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "e0a3dc69-35c6-4aab-9454-719f6aa9418a",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "310a99dd-1a6e-4307-8241-cde6fd9f8fec",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "daa858a1-6d69-4ebb-8784-0d648c021a19",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "d8a38e2d-2a33-41c6-a51f-1af2bb7e54df",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "13f9882c-703b-4b5a-83fa-17a22dd1e228",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "58d8e675-d9ce-45f2-ae41-d574d2d5004e",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "49c7afbb-4342-4ccc-a92b-b06ffa476d31",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "e1f9c304-b193-4821-9a14-d3018aa30c5d"
+          }
+        ],
+        "isHidden": true,
+        "lineageTag": "d2832804-f697-4dcb-b2a3-3e40e8420c19",
+        "partitions": [
+          {
+            "name": "LocalDateTable_0fc81cc0-cef2-436b-aa67-2450dcf6bc32",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(Year(MIN('attacks1'[Date])), 1, 1), Date(Year(MAX('attacks1'[Date])), 12, 31))",
+              "type": "calculated"
+            }
+          }
+        ],
+        "showAsVariationsOnly": true
+      },
+      {
+        "name": "DAX",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Column1",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "c266372b-0cb0-4729-bf45-5b5dcc09b0b1",
+            "sourceColumn": "Column1",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "9c775c7a-a52d-4a78-97b3-9e3860b40c7c",
+        "measures": [
+          {
+            "name": "Total shark attack",
+            "expression": "COUNTROWS(attacks1)",
+            "formatString": "0",
+            "lineageTag": "2cf5e429-6b17-4eea-ba2e-bd8fed4e5c61"
+          },
+          {
+            "name": "total male",
+            "expression": "COUNTROWS(FILTER(attacks1, attacks1[Sex ] = \"M\"))",
+            "formatString": "0",
+            "lineageTag": "c69aa3d9-a781-44cc-853a-ac8f956aae7c"
+          },
+          {
+            "name": "Total Female",
+            "expression": "COUNTROWS(FILTER(attacks1, attacks1[Sex ]= \"F\"))",
+            "formatString": "0",
+            "lineageTag": "a4749989-b1f5-4837-a51d-180b4462843b"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DAX",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"i44FAA==\", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(Source,{{\"Column1\", type text}})",
+                "in",
+                "    #\"Changed Type\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

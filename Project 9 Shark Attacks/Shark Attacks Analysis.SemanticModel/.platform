@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Shark Attacks Analysis"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9942bdf6-3d79-4e79-92e6-f30cc7307ba9"
+  }
+}
